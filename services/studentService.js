@@ -13,7 +13,7 @@ const Group = require('../models/groupModel')
   });
   
   const getStudentsById = asyncHandler(async (req, res) => {
-    const studentId = req.body;
+    const studentId = req.params.id;
     const student = await Student.findOne(studentId).lean().exec()
     res.json(student);
   });
