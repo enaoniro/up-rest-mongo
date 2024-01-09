@@ -7,7 +7,7 @@ router.route('/')
 // .post(studentService.checkStudent)
 .get(studentService.getStudents)
 router.route('/:id').get(studentService.getStudentsByGrup)
-router.route('/:id').get(studentService.getStudentsById)
+router.route('/byId/:id').get(studentService.getStudentsById)
 router.route('/').put(studentService.updateStudent) 
 router.route('/:id').delete(studentService.deleteStudent)
 

@@ -13,8 +13,20 @@ const Group = require('../models/groupModel')
   });
   
   const getStudentsById = asyncHandler(async (req, res) => {
-    const studentId = req.params.id;
-    const student = await Student.findById(studentId).lean().exec()
+    const id = req.params.id;
+    console.log(id)
+     // Confirm data
+  if (!id) {
+    return res.status(400).json({ message: 'Student ID required' })
+}
+
+// Confirm student exists to delete 
+const student = await Student.findById(id).exec()
+
+if (!student) {
+    return res.status(400).json({ message: 'Student not found' })
+}
+
     res.json(student);
   });
   
