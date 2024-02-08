@@ -3,6 +3,8 @@ const asyncHandler = require('express-async-handler')
 const Student = require('../models/studentModel')
 const Group = require('../models/groupModel')
 const Task = require('../models/taskModel')
+const Target = require('../models/targetModel')
+const Record = require('../models/recordModel')
 
 
 //asagisi codelanmak icin bekliyor
@@ -132,18 +134,34 @@ const deleteStudent = asyncHandler(async (req, res) => {
   // Confirm student exists to delete 
   const student = await Student.findById(id).exec()
 
-  if (!student) {
-      return res.status(400).json({ message: 'Student not found' })
-  }
+  
+    // Find all classes associated with the teacher
+    const tasks = await Task.find({ student:id });
 
-      // Delete parent document
-      await student.deleteOne()
-      // Delete all child documents referencing the deleted parent
+    // Delete each class and its associated students
+    for (const task of tasks) {
       await Task.deleteMany({ student:id });
-      console.log('Cascading delete completed successfully.');
+      await Target.deleteMany({task:task._id});
+      await Record.deleteMany({task:task._id});
+    }
+
+    // Finally, delete the teacher
+    await Student.findByIdAndDelete(id);
+
+  // if (!student) {
+  //     return res.status(400).json({ message: 'Student not found' })
+  // }
+
+  //     // Delete parent document
+  //     await student.deleteOne()
+  //     // Delete all child documents referencing the deleted parent
+  //     await Task.deleteMany({ student:id });
+  //     await Target.deleteMany({ task:Task._id });
+  //     await Record.deleteMany({ task:Task._id });
+  //     console.log('Cascading delete completed successfully.');
   
 
-  const reply = `Student '${result.email}' with ID ${result._id} deleted`
+  const reply = `Student '${student.email}' with ID ${student._id} deleted`
 
   res.json(reply)
 })
