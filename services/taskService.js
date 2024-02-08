@@ -168,8 +168,8 @@ try {
  // Delete parent document
  await task.deleteOne()
  // Delete all child documents referencing the deleted parent
- await Target.deleteMany({ id });
- await Record.deleteMany({id});
+ await Target.deleteMany({ task:id });
+ await Record.deleteMany({task:id});
  console.log('Cascading delete completed successfully.');
 
 } catch (error) {

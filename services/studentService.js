@@ -135,15 +135,13 @@ const deleteStudent = asyncHandler(async (req, res) => {
   if (!student) {
       return res.status(400).json({ message: 'Student not found' })
   }
-try{
+
       // Delete parent document
       await student.deleteOne()
       // Delete all child documents referencing the deleted parent
-      await Task.deleteMany({ id });
+      await Task.deleteMany({ student:id });
       console.log('Cascading delete completed successfully.');
-    } catch (error) {
-      console.error('Error during cascading delete:', error);
-    }
+  
 
   const reply = `Student '${result.email}' with ID ${result._id} deleted`
 
