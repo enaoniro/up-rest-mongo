@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler')
 
 const Task = require('../models/taskModel')
+const Target = require('../models/targetModel')
+const Record = require('../models/recordModel')
 const Student = require('../models/studentModel')
 
 // @desc    Get tasks
@@ -18,12 +20,12 @@ if (!task?.length) {
 // Add groupname to each task before sending the response 
 // See Promise.all with map() here: https://youtu.be/4lqJBBEpjRE 
 // You could also do this with a for...of loop
-const taskWithGroup = await Promise.all(task.map(async (task) => {
+const taskWithStudent = await Promise.all(task.map(async (task) => {
     const student = await Student.findById(task.student).lean().exec()
     return { ...task, studentname: student.first_name }
 }))
 
-res.json(taskWithGroup)
+res.json(taskWithStudent)
 })
 
 // @desc Create new task
@@ -161,7 +163,18 @@ if (!task) {
     return res.status(400).json({ message: 'Task not found' })
 }
 
-const result = await task.deleteOne()
+try {
+
+ // Delete parent document
+ await task.deleteOne()
+ // Delete all child documents referencing the deleted parent
+ await Target.deleteMany({ id });
+ await Record.deleteMany({id});
+ console.log('Cascading delete completed successfully.');
+
+} catch (error) {
+ console.error('Error during cascading delete:', error);
+}
 
 const reply = `Task '${result.task1}' with ID ${result._id} deleted`
 

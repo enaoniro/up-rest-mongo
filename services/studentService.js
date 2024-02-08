@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler')
 
 const Student = require('../models/studentModel')
 const Group = require('../models/groupModel')
+const Task = require('../models/taskModel')
 
 
 //asagisi codelanmak icin bekliyor
@@ -13,20 +14,8 @@ const Group = require('../models/groupModel')
   });
   
   const getStudentsById = asyncHandler(async (req, res) => {
-    const id = req.params.id;
-    console.log(id)
-     // Confirm data
-  if (!id) {
-    return res.status(400).json({ message: 'Student ID required' })
-}
-
-// Confirm student exists to delete 
-const student = await Student.findById(id).exec()
-
-if (!student) {
-    return res.status(400).json({ message: 'Student not found' })
-}
-
+    const studentId = req.body;
+    const student = await Student.findOne(studentId).lean().exec()
     res.json(student);
   });
   
@@ -146,8 +135,15 @@ const deleteStudent = asyncHandler(async (req, res) => {
   if (!student) {
       return res.status(400).json({ message: 'Student not found' })
   }
-
-  const result = await student.deleteOne()
+try{
+      // Delete parent document
+      await student.deleteOne()
+      // Delete all child documents referencing the deleted parent
+      await Task.deleteMany({ id });
+      console.log('Cascading delete completed successfully.');
+    } catch (error) {
+      console.error('Error during cascading delete:', error);
+    }
 
   const reply = `Student '${result.email}' with ID ${result._id} deleted`
 
