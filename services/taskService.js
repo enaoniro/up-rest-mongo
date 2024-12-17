@@ -13,9 +13,9 @@ const getTasks = asyncHandler(async (req, res) => {
 const task = await Task.find().lean()
 
 // If no task 
-if (!task?.length) {
-    return res.status(400).json({ message: 'No task found' })
-}
+// if (!task?.length) {
+//     return res.status(400).json({ message: 'No task found' })
+// }
 
 // Add groupname to each task before sending the response 
 // See Promise.all with map() here: https://youtu.be/4lqJBBEpjRE 
@@ -32,7 +32,7 @@ res.json(taskWithStudent)
 // @route POST /task
 // @access Private
 const addTask = asyncHandler(async (req, res) => {
-const { student, isCompleted, task1, task2, task3, task4, task5 } = req.body
+const { student, isCompleted, taskName, target, record, assignedAt, deadline } = req.body
 
 // Confirm data
 if (!student) {
@@ -47,7 +47,7 @@ if (!student) {
 // }
 
 // Create and store the new task2 
-const task = await Task.create({ student, isCompleted, task2, task1, task3, task4, task5 })
+const task = await Task.create({ student, isCompleted, taskName, target, record, assignedAt, deadline})
 
 if (task) { // Created 
     return res.status(201).json({ message: 'New task created' })
@@ -61,7 +61,7 @@ if (task) { // Created
 // @route PATCH /task
 // @access Private
 const updateTask = asyncHandler(async (req, res) => {
-const { _id, task2, task3, student, isCompleted, task4, task5, task1 } = req.body
+const { _id, student, isCompleted, taskName, target, record, assignedAt, deadline } = req.body
 
 console.log(req.body._id)
 
@@ -87,12 +87,12 @@ if (duplicate && duplicate?._id.toString() !== _id) {
 }
 
 task._id = _id
-task.task2 = task2
-task.task1 = task1
-task.task3 = task3
-task.task4 = task4
-task.task5 = task5
+task.taskName = taskName
+task.target = target
+task.record = record
 task.student = student
+task.assignedAt = assignedAt,
+task.deadline = deadline,
 task.isCompleted = isCompleted
 
 
@@ -103,7 +103,7 @@ res.json(`'${updatedTask.id}' updated`)
 
 
 const updateTaskCompleted = asyncHandler(async (req, res) => {
-    const { _id, task2, task3, student, isCompleted, task4, task5, task1 } = req.body
+    const { _id, target, record, student, isCompleted, deadline, assignedAt,  taskName } = req.body
     
     console.log(req.body._id)
     
@@ -129,19 +129,19 @@ const updateTaskCompleted = asyncHandler(async (req, res) => {
     }
     
     task._id = _id
-    task.task2 = task2
-    task.task1 = task1
-    task.task3 = task3
-    task.task4 = task4
-    task.task5 = task5
+    task.taskName = taskName
+    task.target = target
+    task.record = record
     task.student = student
-    task.isCompleted = !task.isCompleted
+    task.assignedAt = assignedAt,
+    task.deadline = deadline,
+    task.isCompleted = isCompleted
     
     
     
     const updatedTask = await task.save()
     
-    res.json(`'${updatedTask.id}' task is completed`)
+    res.json(`'${updatedTask._id}' task is completed`)
     })
 
 // @desc Delete a task

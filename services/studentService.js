@@ -75,6 +75,7 @@ const addStudent = asyncHandler(async (req, res) => {
   } else {
       return res.status(400).json({ message: 'Invalid student data received' })
   }
+  res.json(`${student.name} ${student.email} ${student.group} is added`)
 
 })
 
