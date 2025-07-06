@@ -24,13 +24,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-app.use("/api/v1/users", userRoute);
-app.use("/api/v1/tasks", taskRoute);
-app.use("/api/v1/targets", targetRoute);
-app.use("/api/v1/records", recordRoute);
-app.use("/api/v1/cantons", cantonRoute);
-app.use("/api/v1/groups", groupRoute);
-app.use("/api/v1/students", studentRoute);
+app.use("/users", userRoute);
+app.use("/tasks", taskRoute);
+app.use("/targets", targetRoute);
+app.use("/records", recordRoute);
+app.use("/cantons", cantonRoute);
+app.use("/groups", groupRoute);
+app.use("/students", studentRoute);
 
 // Serve frontend
 // if (process.env.NODE_ENV === 'production') {
