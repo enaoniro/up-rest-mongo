@@ -24,9 +24,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
 // Tüm yolları index.html'e yönlendir
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 
 
 
