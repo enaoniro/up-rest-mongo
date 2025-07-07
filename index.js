@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 //app.use(cors());
 // Express.js
-app.use(cors({ origin: 'https://uptrackme.onrender.com' }));
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
