@@ -26,8 +26,8 @@ const Record = require('../models/recordModel')
 
   // Confirm student exists to delete 
   const student = await Student.findById(id).exec()
-    const studentId = req.body;
-    const student = await Student.findOne(studentId).lean().exec()
+    //const studentId = req.body;
+    //const student = await Student.findOne(studentId).lean().exec()
     res.json(student);
   });
   
