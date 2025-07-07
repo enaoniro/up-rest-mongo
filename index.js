@@ -20,16 +20,20 @@ const path = require('path');
 //const express = require('express');
 const app = express();
 
-// Static dosyaları sun
-app.use(express.static(path.join(__dirname, 'build')));
+// Frontend build dosyalarını sun (React'in build klasörü)
+app.use(express.static(path.join(__dirname, '../client/build')));
 
-// Tüm yolları index.html'e yönlendir
-
+// Tüm GET isteklerini index.html'e yönlendir (React Router için)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 
 
 
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
+// Express.js
+app.use(cors({ origin: 'https://uptrackme.onrender.com' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
