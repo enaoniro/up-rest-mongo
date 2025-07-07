@@ -24,9 +24,9 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Tüm GET isteklerini index.html'e yönlendir (React Router için)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+// });
 
 
 
