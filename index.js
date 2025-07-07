@@ -21,7 +21,7 @@ const path = require('path');
 const app = express();
 
 // Frontend build dosyalarını sun (React'in build klasörü)
-app.use(express.static(path.join(__dirname, '../client/build')));
+// app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Tüm GET isteklerini index.html'e yönlendir (React Router için)
 
@@ -59,9 +59,9 @@ app.use("/students", studentRoute);
 
 // app.use(errorHandler);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+// });
 
 
 mongoose.connection.once('open', () => {
